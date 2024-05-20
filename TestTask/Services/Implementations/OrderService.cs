@@ -27,7 +27,13 @@ namespace TestTask.Services.Implementations
 
         public Task<List<Order>> GetOrders()
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{DateTime.UtcNow.ToLongTimeString()}: GetOrders was called");
+            IQueryable<Order> orders = _context.Orders.Include(o => o.User);
+            return orders
+                .Where(order => (order.User.Status == Enums.UserStatus.Active))
+                .OrderBy(order => order.CreatedAt)
+                .ToListAsync();
+
         }
     }
 }
