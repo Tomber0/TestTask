@@ -18,7 +18,7 @@ namespace TestTask.Services.Implementations
         public Task<Order> GetOrder()
         {
             _logger.LogInformation($"{DateTime.UtcNow.ToLongTimeString()}: GetOrder was called");
-            IQueryable<Order> orders = _context.Orders.Include(o => o.User);
+            IQueryable<Order> orders = _context.Orders;
             return orders
                 .Where(orders => (orders.Quantity > 1))
                 .OrderByDescending(o => o.CreatedAt)
@@ -32,6 +32,16 @@ namespace TestTask.Services.Implementations
             return orders
                 .Where(order => (order.User.Status == Enums.UserStatus.Active))
                 .OrderBy(order => order.CreatedAt)
+                .Select(p => new Order 
+                {
+                    Id = p.Id,
+                    CreatedAt = p.CreatedAt,
+                    Status=p.Status,
+                    Price=p.Price,
+                    ProductName=p.ProductName,
+                    Quantity=p.Quantity,
+                    UserId=p.UserId 
+                } )
                 .ToListAsync();
 
         }
