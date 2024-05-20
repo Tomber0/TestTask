@@ -17,7 +17,7 @@ namespace TestTask.Services.Implementations
 
         public Task<User> GetUser()
         {
-            _logger.LogInformation($"{DateTime.UtcNow.ToLongTimeString()}: Get user was called");
+            _logger.LogInformation($"{DateTime.UtcNow.ToLongTimeString()}: GetUser was called");
             IQueryable<Order> orders = _context.Orders.Include(o => o.User);
             return orders
                 .Where(orders => (orders.CreatedAt.Year == 2003) && (orders.Status == Enums.OrderStatus.Delivered))
@@ -34,7 +34,13 @@ namespace TestTask.Services.Implementations
 
         public Task<List<User>> GetUsers()
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{DateTime.UtcNow.ToLongTimeString()}: GetUsers was called");
+            IQueryable<Order> orders = _context.Orders.Include(o => o.User);
+            return orders
+                .Where(orders => (orders.CreatedAt.Year == 2010) && (orders.Status == Enums.OrderStatus.Paid))
+                .GroupBy(o => o.User)
+                .Select(p => p.Key)
+                .ToListAsync();
         }
     }
 }
