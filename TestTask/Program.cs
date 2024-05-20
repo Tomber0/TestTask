@@ -7,7 +7,6 @@ using TestTask.Services.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-//builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Services.AddControllers().AddJsonOptions(x =>
    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
